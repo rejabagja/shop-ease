@@ -1,8 +1,10 @@
+import LoginPage from "./pages/login";
+
 function App() {
 
   return (
     <>
-      <p className="text-3xl text-center bg-blue-500 text-white">Hello World</p>
+      <LoginPage />
     </>
   )
 }
