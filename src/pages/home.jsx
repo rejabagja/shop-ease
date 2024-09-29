@@ -1,55 +1,34 @@
 import { useState, useEffect } from "react";
-import Navbar from "../components/Navbar";
-import CardProduct from "../components/CardProduct";
 import Products from "../components/Products"
-
+import HeaderSection from "../components/HeaderSection";
+import DataError from "../components/DataError";
+import getProducts from "../services/getProducts";
 
 
 const HomePage = () => {
-  const [isLogin, setIsLogin] = useState(false);
-  const [products, setProducts] = useState([]);
+  // block code for get Products and Products Category state from redux store
+  // ...
+  // 
+  const [products, setProducts] = useState(null);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsloading] = useState(false);
   
   useEffect(() => {
-    async function getProducts() {
-      try {
-        const response = await fetch("https://fakestoreapi.com/products/");
-        const results = await response.json();
-        setProducts(results)
-      } catch (error) {
-        console.log(error);
-      }
-    }
+    setIsloading(true);
     getProducts()
+      .then(result => setProducts(result))
+      .catch(error => setError(error.message))
+      .finally(() => setIsloading(false))
   }, [])
 
   return (
     <>
-      <main className="bg-stone-50 min-h-screen">
-        <Navbar> 
-          <Navbar.Brand name="ShopeEase" />
-          <Navbar.Links>
-            <Navbar.Links.Item target="/home" name="Home" />
-            {(isLogin) && <Navbar.Links.Item target="/cart" name="Cart" />}
-            {(isLogin) && <Navbar.Links.Item target="/login" name="Logout" />}
-            {!isLogin && <Navbar.Links.Item target="/login" name="Login" />}
-          </Navbar.Links>
-        </Navbar>
-        <div className="container mx-auto">
-          <h1 
-            className="text-2xl font-bold pl-5 sm:pl-0 mt-5 border-b-2 pb-3 text-blue-950"
-          >
-            Products:
-          </h1>
-          <Products>
-            {
-              products.map(product => (
-                <CardProduct key={product.id} product={product} />
-              ))
-            }
-          </Products>
-
-        </div>
-      </main>
+      <HeaderSection title="Products:" />
+      {(isLoading) && <h1 className="text-center mt-10 text-xl font-bold text-slate-600">Loading...</h1>}
+      {(error) && <DataError message={error} />}
+      {products && 
+        <Products products={products} />
+      }
     </>
   )
 }

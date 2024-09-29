@@ -1,27 +1,17 @@
-const InputForm = (props) => {
-  const {label, type, name, placeholder} = props;
-  return (
-    <div className="mb-6">
-      <label 
-        htmlFor={name} 
-        className="block text-slate-700 text-sm mb-2 font-bold"
-      >
-        {label}
-      </label>
-      <input 
-        type={type} 
-        name={name} 
-        id={name} 
-        placeholder={placeholder}
-        className="text-sm border w-full px-3 py-2 rounded text-slate-700"
-      />
-    </div>
-  );
-}
+import { useNavigate } from "react-router-dom";
+import InputForm from "../components/InputForm";
+
 
 const LoginPage = () => {
+  // block code for fetching and dispatch users data to redux store
+  // -----
+  // 
+
+  const navigate = useNavigate();
 
   const handleLogin = (event) => {
+    localStorage.setItem('username', event.target.username.value)
+    navigate("/")
     event.preventDefault();
   }
 
@@ -30,13 +20,13 @@ const LoginPage = () => {
       <div className="w-full max-w-xs">
         <h1 className="text-3xl font-bold mb-2 text-blue-900 text-center">ShopEase Login</h1>
         <p className="font-medium text-slate-600 mb-2 text-center">Welcome, Please enter you details</p>
-        <img src="/images/login-ilustrate.svg" alt="login ilustrate" className="max-w-60 block mx-auto mb-2" />
+        <img src="/images/login-ilustrate.svg" alt="login ilustration" className="max-w-60 block mx-auto mb-2" />
         <form onSubmit={handleLogin} method="post">
           <InputForm
-            label="Email"
-            type="email"
-            name="email"
-            placeholder="example@mail.com"
+            label="Username"
+            type="text"
+            name="username"
+            placeholder="Johnd"
           />
           <InputForm
             label="Password"
