@@ -16,7 +16,7 @@ const LoginPage = () => {
   }
 
   return (
-    <div className="min-h-screen flex justify-center items-center">
+    <div className="min-h-screen flex justify-center items-center bg-neutral-50">
       <div className="w-full max-w-xs">
         <h1 className="text-3xl font-bold mb-2 text-blue-900 text-center">ShopEase Login</h1>
         <p className="font-medium text-slate-600 mb-2 text-center">Welcome, Please enter you details</p>
