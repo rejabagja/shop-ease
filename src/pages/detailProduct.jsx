@@ -18,7 +18,7 @@ const DetailproductPage = () => {
       {(isLoading) && <h1 className="text-center mt-10 text-xl font-bold text-slate-600">Loading...</h1>}
       {(error) && <DataError message={error} />}
       {product && (
-        <div className="flex flex-col lg:flex-row p-5 items-center lg:justify-center lg:gap-x-6 lg:mt-5">
+        <div className="flex flex-col lg:flex-row p-5 items-center lg:justify-center lg:gap-x-6 lg:mt-24">
           <div className="image max-w-64 sm:max-w-96 mb-2 relative">
             <button className="bg-blue-900 text-white px-3 py-1 absolute bottom-0 opacity-90 shadow-md shadow-black rounded font-bold cursor-default">{product.category}</button>
             <img src={product.image} alt="" className="max-h-96" />

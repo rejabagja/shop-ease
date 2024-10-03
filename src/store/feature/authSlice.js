@@ -1,24 +1,22 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const initialAuthState = {
+  isLogin: localStorage.access_token ? true : false,
+  isLoading: false,
+  access_token: localStorage.access_token || '',
+  username: localStorage.username || '',
+  error: null,
+  cart: JSON.parse(localStorage.getItem('cart')) || []
+}
 
 const authReducer = createSlice({
   name: 'auth',
-  initialState: {
-    isLogin: localStorage.access_token ? true : false,
-    isLoading: false,
-    access_token: localStorage.access_token || '',
-    username: localStorage.username || '',
-    error: null,
-    cart: JSON.parse(localStorage.getItem('cart')) || []
-  },
+  initialState: initialAuthState,
   reducers: {
     logout: (state) => {
-      state.isLogin = false;
-      state.access_token = '';
-      state.username = '';
-      state.cart = [];
-      state.error = null;
+      state = initialAuthState;
+      return state;
     },
     addToCart: (state, action) => {
       const index = state.cart.findIndex(item => item.id === action.payload.id);
