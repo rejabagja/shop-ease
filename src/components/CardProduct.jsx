@@ -1,4 +1,6 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { handleAddToCart } from "../services/helper";
 
 const Header = ({image, title}) => {
   return (
@@ -29,6 +31,9 @@ const Body = (props) => {
 }
 
 const CardProduct = ({product}) => {
+  const {isLogin} = useSelector(state => state.auth)
+  const navigate = useNavigate();
+
   return (
     <div className="card w-full max-w-xs rounded-lg bg-stone-100 border shadow-md">
       <Header image={product.image} title={product.title} />
@@ -40,7 +45,10 @@ const CardProduct = ({product}) => {
       />
       <div className="footer flex gap-x-3 px-3 mb-3">
         <Link className="py-2 px-4 bg-blue-800 text-white rounded hover:bg-blue-900 font-medium" to={`/products/${product.id}`}>Details</Link>
-        <button className="py-2 px-4 bg-green-700 text-white rounded hover:bg-green-800 font-medium">Add to cart</button>
+        <button 
+          className="py-2 px-4 bg-green-700 text-white rounded hover:bg-green-800 font-medium"
+          onClick={() => isLogin ? handleAddToCart({id: product.id}) : navigate("/login")}
+        >Add to cart</button>
       </div>
     </div>
   )

@@ -1,28 +1,16 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import HeaderSection from "../components/HeaderSection";
-import { useEffect, useState } from "react";
-import getProduct from "../services/getProduct";
 import DataError from "../components/DataError";
+import { useSelector } from "react-redux";
+import { handleAddToCart } from "../services/helper";
 
 
 const DetailproductPage = () => {
   const {id} = useParams();
-  // block code for get product by id in redux store
-  // ----
-
-  const [product, setProduct] = useState(null);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsloading] = useState(false);
-
-  useEffect(() => {
-    setIsloading(true)
-    getProduct(id)
-      .then(result => {
-        (result !== "") ? setProduct(result) : setError("Product Not Found")
-      })
-      .catch(error => setError(error.message))
-      .finally(() => setIsloading(false))
-  }, []);
+  const navigate = useNavigate()
+  const {isLoading, products, error} = useSelector(state => state.product)
+  const {isLogin} = useSelector(state => state.auth)
+  const product = products.find(product => product.id === Number(id))
 
   return (
     <>
@@ -38,11 +26,17 @@ const DetailproductPage = () => {
           <div className="body sm:max-w-2xl">
             <h2 className="text-2xl text-slate-900 font-bold my-3 tracking-tighter">{product.title}</h2>
             <p className="text-xl font-bold mb-2">$ {product.price}</p>
-            <p className="text-medium font-medium mb-2">🌟 {product.rating.rate}/5.0 ({product.rating.count} reviews)</p>
+            <p className="text-medium font-medium mb-3">🌟 {product.rating.rate}/5.0 ({product.rating.count} reviews)</p>
+            <p className="text-lg text-slate-800 bg-slate-50 text-justify font-medium">Description:</p>
             <p className="text-lg text-slate-800 bg-slate-50 text-justify mb-4">{product.description}</p>
             <div className="flex items-center gap-x-4">
-              <button className="text-slate-900 font-medium border-2 border-blue-900 px-4 py-2 rounded cursor-default">Stock: 20 pcs</button>
-              <button className="py-2 px-4 bg-green-700 text-white rounded hover:bg-green-800 font-medium">Add to cart</button>
+              <button className="text-slate-900 font-medium border-2 border-blue-900 px-4 py-2 rounded cursor-default">Stock: {product.stock} pcs</button>
+              <button 
+                className="py-2 px-4 bg-green-700 text-white rounded hover:bg-green-800 font-medium"
+                onClick={() => isLogin ? handleAddToCart({id: product.id}) : navigate("/login")}
+              >
+                Add to cart
+              </button>
             </div>
           </div>
         </div>

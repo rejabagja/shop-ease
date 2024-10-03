@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const LinkItem = (props) => {
   const {to="#", children, classname, handleClick = () => {}} = props;
@@ -14,10 +15,15 @@ const LinkItem = (props) => {
   )
 }
 
-const Navbar = () => {
-  const [isLogin, username, cart] = [true, 'Reza', []]; // diambil dari redux
+const Navbar = ({handleLogout}) => {
+  const {isLogin, username, cart} = useSelector(state => state.auth)
   const [isOpen, setIsopen] = useState(false);
-  const {pathname} = useLocation()
+  const {pathname} = useLocation();
+  
+  function calculateCartLength() {
+    const totalQtyCart = cart.reduce((acc, current) => acc + current.qty, 0);
+    return totalQtyCart;
+  }
 
   const activeNav = "border-2 border-blue-500 sm:bg-blue-950 sm:border-0";
 
@@ -27,9 +33,7 @@ const Navbar = () => {
 
   const classNavlink = ["sm:hover:bg-blue-950", "hover:border", "hover:border-blue-500", "sm:hover:border-0"].join(" ");
 
-  const handleLogout = () => {
-    console.log('logout');
-  }
+  
 
   return (
     <nav className="h-14 bg-blue-900 py-2 shadow shadow-black fixed inset-0 z-30">
@@ -38,10 +42,10 @@ const Navbar = () => {
           <Link to="/" onClick={() => setIsopen(false)}>ShopeEase</Link>
         </h1>
         <div className={`fixed z-30 top-14 inset-x-0 bottom-0 flex-col gap-y-1 bg-stone-50 sm:static sm:flex sm:flex-row sm:bg-transparent sm:text-white sm:gap-x-1 sm:gap-y-0 justify-center items-center ${isOpen ? "flex" : "hidden"}`}>
-          <LinkItem to="/" classname={(pathname === "/" || /\/products\/[0-9]/.test(pathname)) ? activeNav : classNavlink} handleClick={() => toggleMenu()}>Home</LinkItem>
+          <LinkItem to="/" classname={(pathname === "/" || /\/products\/[0-9]/.test(pathname)) ? activeNav : classNavlink} handleClick={() => setIsopen(false)}>Home</LinkItem>
           { isLogin ? (
             <>
-              <LinkItem to="/cart" classname={(pathname === "/cart") ? activeNav : classNavlink} handleClick={() => toggleMenu()}>Cart: <span className="bg-red-500 px-2 tex-center w-2 h-2 rounded text-slate-100">{cart.length}</span></LinkItem>
+              <LinkItem to="/cart" classname={(pathname === "/cart") ? activeNav : classNavlink} handleClick={() => setIsopen(false)}>Cart: <span className="bg-red-500 px-2 tex-center w-2 h-2 rounded text-slate-100">{calculateCartLength()}</span></LinkItem>
               <LinkItem classname="cursor-default">{username}</LinkItem>
               <LinkItem classname={classNavlink} handleClick={() => handleLogout()}>Logout</LinkItem>
             </>) : (

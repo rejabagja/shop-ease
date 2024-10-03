@@ -5,6 +5,7 @@ import LoginPage from '../pages/login.jsx'
 import CartPage from '../pages/cart.jsx';
 import DetailproductPage from '../pages/detailProduct.jsx';
 import ErrorPage from '../pages/error.jsx';
+import store from "../store/store.js"
 
 
 
@@ -25,12 +26,24 @@ const router = createBrowserRouter([
       {
         path: "cart",
         element: <CartPage />,
+        loader: () => {
+          if (!store.getState().auth.isLogin) {
+            return redirect("/login")
+          } 
+          return null
+        }
       },
     ]
   },
   {
     path: "/login",
     element: <LoginPage />,
+    loader: () => {
+      if (store.getState().auth.isLogin) {
+        return redirect("/")
+      }
+      return null
+    }
   }
 ]);
 

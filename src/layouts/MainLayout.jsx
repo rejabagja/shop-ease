@@ -1,14 +1,31 @@
-// import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { fetchProducts } from "../store/feature/productSlice"
+import { logout } from "../store/feature/authSlice";
 
 const MainLayout = () => {
-  // block code for fetching and dispatch products data to redux store
-  // -----
-  // 
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    const confirmation = confirm("Are you sure want to logout?");
+    if (confirmation) {
+      dispatch(logout())
+      localStorage.removeItem('access_token')
+      localStorage.removeItem('username')
+      localStorage.removeItem('cart')
+      window.location.href = "/login"
+    }
+  }
+
+  useEffect(() => {
+    dispatch(fetchProducts())
+  }, [])
+
   return (
     < div className="bg-neutral-50">
-      <Navbar />
+      <Navbar handleLogout={handleLogout} />
       <div className="container mx-auto mt-20">
         <Outlet />
       </div>

@@ -5,7 +5,10 @@ const Products = ({products}) => {
     <div className="p-5 flex gap-6 flex-wrap justify-center">
       {products.map(product => {
         return (
-          <CardProduct key={product.id} product={product} />
+          <CardProduct 
+            key={product.id} 
+            product={product} 
+          />
         )
       })}
     </div>
