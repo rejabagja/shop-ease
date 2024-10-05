@@ -17,6 +17,7 @@ const DetailproductPage = () => {
       <HeaderSection><Link to="/">Products</Link> {" > "} Detail Product:</HeaderSection>
       {(isLoading) && <h1 className="text-center mt-10 text-xl font-bold text-slate-600">Loading...</h1>}
       {(error) && <DataError message={error} />}
+      {!isLoading && !product && <DataError message="Data product not found" />}
       {product && (
         <div className="flex flex-col lg:flex-row p-5 items-center lg:justify-center lg:gap-x-6 lg:mt-24">
           <div className="image max-w-64 sm:max-w-96 mb-2 relative">
