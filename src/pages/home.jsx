@@ -9,7 +9,7 @@ const HomePage = () => {
 
   return (
     <>
-      <HeaderSection title="Products:" />
+      <HeaderSection>Products:</HeaderSection>
       {(isLoading) && <h1 className="text-center mt-10 text-xl font-bold text-slate-600">Loading...</h1>}
       {(error) && <DataError message={error} />}
       {products.length > 0 && 

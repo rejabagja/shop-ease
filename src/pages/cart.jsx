@@ -1,16 +1,15 @@
 import HeaderSection from "../components/HeaderSection";
+import { useSelector } from "react-redux";
 
 const CartPage = () => {
-  // block code for get cart data from redux store
-  // ----
-
-  const cart = null;
-
+  const {cart} = useSelector(state => state.auth);
   return (
     <>
-      <HeaderSection title="My Cart:" />
-      {!cart && <h1 className="text-center mt-10 text-red-600 font-medium">You dont have cart</h1>}
-      {/* passing data carts to cartTable component */}
+      <HeaderSection>My Cart:</HeaderSection>
+      {cart.length === 0 && <h1 className="text-center mt-10 text-red-600 font-medium">You dont have cart</h1>}
+      <div className="p-5 overflow-auto mt-2">
+        {JSON.stringify(cart)}
+      </div>
     </>
   )
 }

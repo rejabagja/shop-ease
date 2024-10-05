@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import HeaderSection from "../components/HeaderSection";
 import DataError from "../components/DataError";
 import { useSelector } from "react-redux";
@@ -14,7 +14,7 @@ const DetailproductPage = () => {
 
   return (
     <>
-      <HeaderSection title="Detail Product:" />
+      <HeaderSection><Link to="/">Products</Link> {" > "} Detail Product:</HeaderSection>
       {(isLoading) && <h1 className="text-center mt-10 text-xl font-bold text-slate-600">Loading...</h1>}
       {(error) && <DataError message={error} />}
       {product && (

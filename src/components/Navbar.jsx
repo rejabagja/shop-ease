@@ -31,22 +31,21 @@ const Navbar = ({handleLogout}) => {
     setIsopen(!isOpen);
   }
 
-  const classNavlink = ["sm:hover:bg-blue-950", "hover:border", "hover:border-blue-500", "sm:hover:border-0"].join(" ");
+  const classNavlink = ["sm:hover:bg-blue-950", "hover:border", "hover:border-blue-500", "sm:hover:border-0", "mx-2"].join(" ");
 
   
-
   return (
     <nav className="h-14 bg-blue-900 py-2 shadow shadow-black fixed inset-0 z-30">
       <div className="container px-5 mx-auto flex items-center justify-between sm:justify-start sm:gap-x-5">
         <h1 name="brand" className="text-2xl font-bold leading-9 drop-shadow-md hover:drop-shadow-2xl text-white">
           <Link to="/" onClick={() => setIsopen(false)}>ShopeEase</Link>
         </h1>
-        <div className={`fixed z-30 top-14 inset-x-0 bottom-0 flex-col gap-y-1 bg-stone-50 sm:static sm:flex sm:flex-row sm:bg-transparent sm:text-white sm:gap-x-1 sm:gap-y-0 justify-center items-center ${isOpen ? "flex" : "hidden"}`}>
+        <div className={`fixed z-30 top-14 inset-x-0 bottom-0 flex-col gap-y-2 bg-stone-50 sm:static sm:flex sm:flex-row sm:justify-start sm:bg-transparent sm:text-white sm:gap-y-0 justify-center items-center ${isOpen ? "flex" : "hidden"} sm:flex-1`}>
           <LinkItem to="/" classname={(pathname === "/" || /\/products\/[0-9]/.test(pathname)) ? activeNav : classNavlink} handleClick={() => setIsopen(false)}>Home</LinkItem>
           { isLogin ? (
             <>
               <LinkItem to="/cart" classname={(pathname === "/cart") ? activeNav : classNavlink} handleClick={() => setIsopen(false)}>Cart: <span className="bg-red-500 px-2 tex-center w-2 h-2 rounded text-slate-100">{calculateCartLength()}</span></LinkItem>
-              <LinkItem classname="cursor-default">{username}</LinkItem>
+              <LinkItem classname="cursor-default sm:ml-auto">{username}</LinkItem>
               <LinkItem classname={classNavlink} handleClick={() => handleLogout()}>Logout</LinkItem>
             </>) : (
             <>
