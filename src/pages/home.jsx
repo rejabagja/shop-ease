@@ -6,15 +6,16 @@ import { useSelector } from "react-redux";
 
 const HomePage = () => {
   const {isLoading, products, error} = useSelector(state => state.product);
-
   return (
     <>
       <HeaderSection>Products:</HeaderSection>
-      {(isLoading) && <h1 className="text-center mt-10 text-xl font-bold text-slate-600">Loading...</h1>}
-      {(error) && <DataError message={error} />}
-      {products.length > 0 && 
-        <Products products={products} />
-      }
+      <section>
+        {(isLoading) && <h1 className="text-center mt-10 text-xl font-bold text-slate-600">Loading...</h1>}
+        {(error) && <DataError message={error} />}
+        {products.length > 0 && 
+          <Products products={products} />
+        }
+      </section>
     </>
   )
 }

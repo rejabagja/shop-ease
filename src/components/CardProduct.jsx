@@ -13,7 +13,7 @@ const Header = ({image, title}) => {
 const Body = (props) => {
   const {title, category, price, description} = props;
   return (
-    <div className="px-3 mb-2">
+    <div className="px-3">
       <h2 className="text-xl mb-1 font-bold text-slate-900 tracking-tighter">
         {(title.length > 25) ? `${title.substring(0,25)}...` : title}
       </h2>
@@ -31,8 +31,11 @@ const Body = (props) => {
 }
 
 const CardProduct = ({product}) => {
-  const {isLogin} = useSelector(state => state.auth)
+  const {isLogin, cart} = useSelector(state => state.auth);
+  const {stocks} = useSelector(state => state.product);
   const navigate = useNavigate();
+  const productStock = stocks.find(item => item.id === product.id).stock;
+  const inCart = cart.find(item => item.id === product.id) || null;
 
   return (
     <div className="card w-full max-w-xs rounded-lg bg-stone-100 border shadow-md">
@@ -43,12 +46,18 @@ const CardProduct = ({product}) => {
         description={product.description}
         price={product.price}
       />
+      <div className="px-3 my-1">
+        {productStock === 0 && <p className="text-red-500 text-sm">*product out of stock</p>}
+      </div>
       <div className="footer flex gap-x-3 px-3 mb-3">
         <Link className="py-2 px-4 bg-blue-800 text-white rounded hover:bg-blue-900 font-medium" to={`/products/${product.id}`}>Details</Link>
         <button 
           className="py-2 px-4 bg-green-700 text-white rounded hover:bg-green-800 font-medium"
           onClick={() => isLogin ? handleAddToCart({id: product.id}) : navigate("/login")}
-        >Add to cart</button>
+          disabled={inCart && productStock === inCart.qty || productStock === 0 ? true : false}
+        >
+          Add to cart
+        </button>
       </div>
     </div>
   )

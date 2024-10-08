@@ -15,6 +15,7 @@ const MainLayout = () => {
       localStorage.removeItem('access_token')
       localStorage.removeItem('username')
       localStorage.removeItem('cart')
+      localStorage.removeItem('stocks')
       window.location.href = "/login"
     }
   }
@@ -24,12 +25,12 @@ const MainLayout = () => {
   }, [])
 
   return (
-    < div className="bg-neutral-50">
+    <>
       <Navbar handleLogout={handleLogout} />
-      <div className="container mx-auto mt-20">
+      <div className="container mx-auto pt-14 flex flex-col">
         <Outlet />
       </div>
-    </div>
+    </>
   )
 }
 

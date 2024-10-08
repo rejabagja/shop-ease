@@ -4,7 +4,7 @@ import { loginUser } from "../store/feature/authSlice";
 import { Link, useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
-  const {isLoading, error, isLogin} = useSelector(state => state.auth)
+  const {isLoading, error} = useSelector(state => state.auth)
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -13,10 +13,8 @@ const LoginPage = () => {
     dispatch(loginUser({
       username: event.target.username.value, 
       password: event.target.password.value, 
-    }))
+    })).then((res) => !res.error ? navigate("/") : null)
   }
-
-  {isLogin && navigate("/")}
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-neutral-50">

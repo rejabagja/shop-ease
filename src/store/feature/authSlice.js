@@ -26,6 +26,25 @@ const authReducer = createSlice({
         state.cart.push({id: action.payload.id, qty: 1})
       }
       localStorage.setItem('cart', JSON.stringify(state.cart))
+    },
+    decrementQtyCart: (state, action) => {
+      const cartIndex = state.cart.findIndex(item => item.id === action.payload.id);
+      state.cart[cartIndex].qty--;
+      localStorage.setItem('cart', JSON.stringify(state.cart));
+    },
+    incrementQtyCart: (state, action) => {
+      const cartIndex = state.cart.findIndex(item => item.id === action.payload.id);
+      state.cart[cartIndex].qty++;
+      localStorage.setItem('cart', JSON.stringify(state.cart));
+    },
+    removeItemCart: (state, action) => {
+      const cartIndex = state.cart.findIndex(item => item.id == action.payload);
+      state.cart.splice(cartIndex, 1);
+      localStorage.setItem('cart', JSON.stringify(state.cart));
+    },
+    checkoutCart: (state) => {
+      state.cart.splice(0, state.cart.length)
+      localStorage.setItem('cart', JSON.stringify(state.cart))
     }
   },
   extraReducers: (builder) => {
@@ -37,6 +56,8 @@ const authReducer = createSlice({
       state.isLogin = true;
       state.access_token = action.payload.token;
       state.username = action.payload.username;
+      localStorage.setItem('access_token', action.payload.token);
+      localStorage.setItem('username', action.payload.username);
     });
     builder.addCase(loginUser.rejected, (state, action) => {
       state.isLoading = false;
@@ -45,7 +66,7 @@ const authReducer = createSlice({
   }
 })
 
-export const {logout, addToCart} = authReducer.actions;
+export const {logout, addToCart, decrementQtyCart, incrementQtyCart, removeItemCart, checkoutCart} = authReducer.actions;
 
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
@@ -55,8 +76,6 @@ export const loginUser = createAsyncThunk(
         "username": credentials.username,
         "password": credentials.password,
       })
-      localStorage.setItem('access_token', data.token)
-      localStorage.setItem('username', credentials.username)
       return {token: data.token, username: credentials.username}
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
