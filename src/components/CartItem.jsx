@@ -1,21 +1,31 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { decrementQtyCart, incrementQtyCart, removeItemCart } from "../store/feature/authSlice";
+import { decrementQtyCart, incrementQtyCart, overMaxStockStatus, removeItemCart } from "../store/feature/authSlice";
 import { useEffect, useState } from "react";
 
 const CartItem = ({product, cart}) => {
-  const [isMaxOfStock, setIsMaxOfStock] = useState(false);
+  const [isOverOfStock, setIsOverOfStock] = useState(cart.isOverMax || false);
   const dispatch = useDispatch();
   const {stocks} = useSelector(state => state.product);
   const productStock = stocks.find(item => item.id === cart.id).stock;
 
   useEffect(() => {
-    if (cart.qty === productStock) {
-      setIsMaxOfStock(true);
+    if (cart.qty > productStock) {
+      if (!cart.isOverMax && !isOverOfStock) {
+        dispatch(overMaxStockStatus({id: cart.id, status: true}));
+        setIsOverOfStock(true);
+      }
     } else {
-      if (isMaxOfStock) setIsMaxOfStock(false);
+      if (isOverOfStock && cart.isOverMax) {
+        setIsOverOfStock(false);
+        dispatch(overMaxStockStatus({id: cart.id, status: false}))
+      }
     }
   }, [cart.qty])
+
+  const subTotalPrice = (price, qty) => {
+    return "$ " + (price * qty).toFixed(2);
+  }
 
   const handleDecrementQty = (payload) => {
     dispatch(decrementQtyCart(payload));
@@ -56,13 +66,13 @@ const CartItem = ({product, cart}) => {
             -
           </button>
           <span className="mx-3 text-lg font-semibold">{cart.qty}</span>
-          <button className=" px-4 text-lg bg-purple-300 font-bold rounded-lg shadow shadow-purple-400" onClick={() => handleIncrementQty(cart)} disabled={cart.qty === productStock ? true : false}>
+          <button className=" px-4 text-lg bg-purple-300 font-bold rounded-lg shadow shadow-purple-400" onClick={() => handleIncrementQty(cart)} >
             +
           </button>
-          <span className="font-bold text-xl ml-auto">${product.price}</span>
+          <span className="font-bold text-xl ml-auto">{subTotalPrice(product.price, cart.qty)}</span>
         </div>
         <div className="flex justify-between">
-          <p className="text-red-500 text-sm">{isMaxOfStock && "*You reach max of stock"}</p>
+          <p className="text-red-500 text-sm">{isOverOfStock && "*Quantity exceeds available stock"}</p>
           <button className="px-4 py-1 text-sm bg-red-500 rounded-full self-end text-white shadow shadow-red-800" onClick={() => handleRemoveCart(cart.id)}>
             remove
           </button>

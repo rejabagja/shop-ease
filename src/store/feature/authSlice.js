@@ -43,8 +43,13 @@ const authReducer = createSlice({
       localStorage.setItem('cart', JSON.stringify(state.cart));
     },
     checkoutCart: (state) => {
-      state.cart.splice(0, state.cart.length)
-      localStorage.setItem('cart', JSON.stringify(state.cart))
+      state.cart = state.cart.filter(item => item.isOverMax);
+      localStorage.setItem('cart', JSON.stringify(state.cart));
+    },
+    overMaxStockStatus: (state, action) => {
+      const cartIndex = state.cart.findIndex(item => item.id === action.payload.id);
+      state.cart[cartIndex].isOverMax = action.payload.status ? true : false;
+      localStorage.setItem('cart', JSON.stringify(state.cart));
     }
   },
   extraReducers: (builder) => {
@@ -66,7 +71,7 @@ const authReducer = createSlice({
   }
 })
 
-export const {logout, addToCart, decrementQtyCart, incrementQtyCart, removeItemCart, checkoutCart} = authReducer.actions;
+export const {logout, addToCart, decrementQtyCart, incrementQtyCart, removeItemCart, checkoutCart, overMaxStockStatus} = authReducer.actions;
 
 export const loginUser = createAsyncThunk(
   "auth/loginUser",

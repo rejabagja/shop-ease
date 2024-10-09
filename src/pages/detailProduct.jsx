@@ -8,14 +8,11 @@ const DetailproductPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { isLoading, products, error, stocks } = useSelector((state) => state.product);
-  const { isLogin, cart } = useSelector((state) => state.auth);
+  const { isLogin } = useSelector((state) => state.auth);
 
-  const product = products.find((product) => product.id === Number(id));
-  let inCart, productStock;
-  if (product) {
-    inCart = cart.find(item => item.id === product.id);
-    productStock = stocks.find(item => item.id === product.id).stock;
-  }
+  const product = products.find((item) => item.id === Number(id));
+  let productStock;
+  if (product) productStock = stocks.find(item => item.id === product.id).stock;
 
   return (
     <>
@@ -60,13 +57,13 @@ const DetailproductPage = () => {
                   { productStock === 0 && "Out of stock"}
                 </button>
                 <button
-                  className="py-2 px-4 bg-green-700 text-white rounded hover:bg-green-800 font-medium"
+                  className="py-2 px-4 bg-green-600 text-white rounded hover:bg-green-700 font-medium"
                   onClick={() =>
                     isLogin
                       ? handleAddToCart({ id: product.id })
                       : navigate("/login")
                   }
-                  disabled={inCart && productStock === inCart.qty || productStock === 0 ? true : false}
+                  disabled={productStock === 0 ? true : false}
                 >
                   Add to cart
                 </button>
